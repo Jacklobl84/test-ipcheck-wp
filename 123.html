@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+    </head>
+    <body>
+    <form id="form">
+    <input type="text" id="userInput" />
+    <input type="button" id="sese" value="Submit" onclick="myFunction();">
+    </form> 
+
+    <table id="GeoResults"></table>
+        <script>
+           function myFunction() {
+            var data = document.getElementById("userInput").value;
+            var arr = data.split(",");
+
+            var ip_addresses = [];
+            jQuery.each(arr, function(index, value) {
+              ip_addresses.push({
+                  query:value
+              });
+            });
+
+          jQuery.post("http://ip-api.com/batch/", JSON.stringify(ip_addresses), function(response) {
+              var table_body = "";
+              jQuery.each(response, function(i, ipObject) {
+                table_body += "<div style='margin-bottom: 10px; border-bottom: 1px solid black;'><table>";
+                jQuery.each(ipObject, function(k, v) {
+                  table_body += "<tr><td>" + k + "</td><td><b>" + v + "</b></td></tr>";
+                });
+                table_body += "</table></div>";
+              })
+              jQuery("#GeoResults").prepend(table_body);
+          }, "json");
+      }
+
+        </script>
+    </body>
+</html>
